@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements
     Spinner spinner;
     int positionSpinner = 0;
     String[] listes_fileAttente = {"Cinéma", "Stage Airbus", "Dentiste","Bibliothèque Universitaire"};
-    int[] nb_attente = {2, 6, 4 , 10};
+    //int[] nb_attente = {2, 6, 4 , 10};
 
+    FileAttente[] listesFileAttente = {new FileAttente("Cinéma", 2), new FileAttente("Stage Airbus",6),
+        new FileAttente("Dentiste", 4), new FileAttente("Bibliothèque Universitaire", 10)};
 
 
     @Override
@@ -92,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements
         btn_rejoindre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nb_attente[positionSpinner] ++;
-                changeEditText(positionSpinner);
+                changeEditText(listesFileAttente[positionSpinner].rejoindreFA());
                 btn_rejoindre.setEnabled(false);
                 btn_quitter.setEnabled(true);
             }
@@ -108,8 +109,7 @@ public class MainActivity extends AppCompatActivity implements
         btn_quitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nb_attente[positionSpinner] --;
-                changeEditText(positionSpinner);
+                changeEditText(listesFileAttente[positionSpinner].quitterFA());
                 btn_quitter.setEnabled(false);
                 btn_rejoindre.setEnabled(true);
 
@@ -119,14 +119,14 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(),listes_fileAttente[position] , Toast.LENGTH_LONG).show();
-        changeEditText(position);
+        //Toast.makeText(getApplicationContext(),listes_fileAttente[position] , Toast.LENGTH_LONG).show();
         positionSpinner = position;
+        changeEditText(listesFileAttente[positionSpinner].getNbrAttente());
         /* enable le bouton apres avoir changer de file d'attente */
         Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
         Button btn_quitter = findViewById(R.id.btn_quitter);
-        btn_rejoindre.setEnabled(true);
-        btn_quitter.setEnabled(false);
+        btn_rejoindre.setEnabled(!listesFileAttente[positionSpinner].estDansLaFile());
+        btn_quitter.setEnabled(listesFileAttente[positionSpinner].estDansLaFile());
     }
 
     @Override
@@ -134,8 +134,8 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    protected void changeEditText(int position){
+    protected void changeEditText(int nombre){
         EditText editText = findViewById(R.id.txt_name);
-        editText.setText(Integer.toString(nb_attente[position]));
+        editText.setText(Integer.toString(nombre));
     }
 }

@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
 
         initSpinner();
         rejoindre();
+        quitter();
     }
 
     protected void initSpinner() {
@@ -56,12 +57,32 @@ public class MainActivity extends AppCompatActivity implements
 
     public void rejoindre(){
         final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
+        final Button btn_quitter = findViewById(R.id.btn_quitter);
+
         btn_rejoindre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nb_attente[positionSpinner] ++;
                 changeEditText(positionSpinner);
                 btn_rejoindre.setEnabled(false);
+                btn_quitter.setEnabled(true);
+            }
+        });
+    }
+
+    public void quitter(){
+        final Button btn_quitter = findViewById(R.id.btn_quitter);
+        final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
+
+        btn_quitter.setEnabled(false);
+        btn_quitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nb_attente[positionSpinner] --;
+                changeEditText(positionSpinner);
+                btn_quitter.setEnabled(false);
+                btn_rejoindre.setEnabled(true);
+
             }
         });
     }
@@ -73,7 +94,9 @@ public class MainActivity extends AppCompatActivity implements
         positionSpinner = position;
         /* enable le bouton apres avoir changer de file d'attente */
         Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
+        Button btn_quitter = findViewById(R.id.btn_quitter);
         btn_rejoindre.setEnabled(true);
+        btn_quitter.setEnabled(false);
     }
 
     @Override

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,8 +20,8 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
     Spinner spinner;
-    View nom_file;
-    String[] country = {"India", "USA", "China", "Japan", "Other"};
+    String[] listes_fileAttente = {"Cinéma", "Stage Airbus", "Dentiste"};
+
 
 
     @Override
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
         ArrayAdapter adapter = new ArrayAdapter(
                 this,
                 android.R.layout.simple_spinner_item,
-                country
+                listes_fileAttente
         );
 
         /* On definit une présentation du spinner quand il est déroulé         (android.R.layout.simple_spinner_dropdown_item) */
@@ -50,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(),country[position] , Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),listes_fileAttente[position] , Toast.LENGTH_LONG).show();
+        EditText editText = findViewById(R.id.txt_name);
+        editText.setText(listes_fileAttente[position]);
     }
 
     @Override

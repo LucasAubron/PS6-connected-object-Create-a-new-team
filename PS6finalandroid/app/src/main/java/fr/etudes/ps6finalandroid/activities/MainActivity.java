@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -20,7 +21,9 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
     Spinner spinner;
-    String[] listes_fileAttente = {"Cinéma", "Stage Airbus", "Dentiste"};
+    int positionSpinner = 0;
+    String[] listes_fileAttente = {"Cinéma", "Stage Airbus", "Dentiste","Bibliothèque Universitaire"};
+    int[] nb_attente = {2, 6, 4 , 10};
 
 
 
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         initSpinner();
+        rejoindre();
     }
 
     protected void initSpinner() {
@@ -50,15 +54,35 @@ public class MainActivity extends AppCompatActivity implements
         spinner.setAdapter(adapter);
     }
 
+    public void rejoindre(){
+        final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
+        btn_rejoindre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nb_attente[positionSpinner] ++;
+                changeEditText(positionSpinner);
+                btn_rejoindre.setEnabled(false);
+            }
+        });
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getApplicationContext(),listes_fileAttente[position] , Toast.LENGTH_LONG).show();
-        EditText editText = findViewById(R.id.txt_name);
-        editText.setText(listes_fileAttente[position]);
+        changeEditText(position);
+        positionSpinner = position;
+        /* enable le bouton apres avoir changer de file d'attente */
+        Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
+        btn_rejoindre.setEnabled(true);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    protected void changeEditText(int position){
+        EditText editText = findViewById(R.id.txt_name);
+        editText.setText(Integer.toString(nb_attente[position]));
     }
 }

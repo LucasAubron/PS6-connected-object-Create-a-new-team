@@ -1,6 +1,5 @@
 package fr.etudes.ps6finalandroid.activities;
 
-import android.app.VoiceInteractor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements
 
     Spinner spinner;
     int positionSpinner = 0;
-    String[] listes_fileAttente = {"Cinéma", "Stage Airbus", "Dentiste","Bibliothèque Universitaire"};
-    //int[] nb_attente = {2, 6, 4 , 10};
 
     FileAttente[] listesFileAttente = {new FileAttente("Cinéma", 2), new FileAttente("Stage Airbus",6),
         new FileAttente("Dentiste", 4), new FileAttente("Bibliothèque Universitaire", 10)};
@@ -114,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements
         ArrayAdapter adapter = new ArrayAdapter(
                 this,
                 android.R.layout.simple_spinner_item,
-                listes_fileAttente
+                listesFileAttente
         );
 
         /* On definit une présentation du spinner quand il est déroulé         (android.R.layout.simple_spinner_dropdown_item) */
@@ -155,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Toast.makeText(getApplicationContext(),listes_fileAttente[position] , Toast.LENGTH_LONG).show();
         positionSpinner = position;
         changeEditText(listesFileAttente[positionSpinner].getNbrAttente());
         /* enable le bouton apres avoir changer de file d'attente */

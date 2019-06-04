@@ -19,7 +19,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public final class Utils {
-    private static String URL = "http://192.168.0.10:3000/api/clients/l1";
+    private static String URL = "http://192.168.0.10:3000/api/clients/";
     private Utils() {
     }
 
@@ -28,7 +28,7 @@ public final class Utils {
         if (idList<1 || idList>4) throw new RuntimeException("l'id de liste demandé est erroné");
         JsonArrayRequest arr=new JsonArrayRequest(
                 Request.Method.GET,
-                URL,
+                URL + idList,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -61,7 +61,7 @@ public final class Utils {
         res.add(-1);
         JsonArrayRequest arr=new JsonArrayRequest(
                 Request.Method.GET,
-                URL,
+                URL + idList,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override

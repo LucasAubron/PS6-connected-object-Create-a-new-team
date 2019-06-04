@@ -19,21 +19,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     int numFA = 0;
     String fileName = "src";
-    /*
+
     private FileAttente[] listesFileAttente={
-            new FileAttente("Médecin1", Utils.getList(1, this.getApplicationContext()).size()),
-            new FileAttente("Médecin2",Utils.getList(2, this.getApplicationContext()).size()),
-            new FileAttente("Médecin3", Utils.getList(3, this.getApplicationContext()).size()),
-            new FileAttente("Médecin4", Utils.getList(4, this.getApplicationContext()).size())
+            new FileAttente("Médecin1", Utils.getList(1, this).size()),
+            new FileAttente("Médecin2", Utils.getList(2, this).size()),
+            new FileAttente("Médecin3", Utils.getList(3, this).size()),
+            new FileAttente("Médecin4", Utils.getList(4, this).size())
     };
-    */
+    /*
     private FileAttente[] listesFileAttente= {
             new FileAttente("Médecin1", 2),
             new FileAttente("Médecin2", 2),
             new FileAttente("Médecin3", 2),
             new FileAttente("Médecin4", 2)
     };
-
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -70,7 +70,7 @@ public class FileAttente {
     public void retirerPersonneFA(int placePersonne){
         if (placePersonne < place)
             place--;
-        nbrAttente--;
+            nbrAttente--;
     }
 
 

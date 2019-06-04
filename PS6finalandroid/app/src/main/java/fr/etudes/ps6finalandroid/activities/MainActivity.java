@@ -48,25 +48,22 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         String URL = "http://192.168.99.2:3000/api/clients";
         RequestQueue rq= Volley.newRequestQueue(this);
-        /*
         JsonArrayRequest arr=new JsonArrayRequest(
                 Request.Method.GET,
-                null,
+                URL,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        try{
                             for(int i=0;i<response.length();i++){
-                                JSONObject student = response.getJSONObject(i);
-                                String prenom = student.getString("prenom");
-                                String nom = student.getString("nom");
-                                String id = student.getString("id");
-
-                                // Display the formatted json data in text view
-                                mTextView.append(firstName +" " + lastName +"\nAge : " + age);
-                                mTextView.append("\n\n");
+                                JSONObject client = response.getJSONObject(i);
+                                String prenom = client.getString("prenom");
+                                String nom = client.getString("nom");
+                                String id = client.getString("id");
+                                System.out.println(nom+" "+prenom+"\n");
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e){
                             e.printStackTrace();
                         }
                     }
@@ -77,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
         );
-        */
-        /*
+        rq.add(arr);
+        /*pour get un seul client
         JsonObjectRequest obj=new JsonObjectRequest(
                 Request.Method.GET,
                 URL,
@@ -97,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
         );
         */
-        //rq.add(obj);
         initSpinner();
         rejoindre();
         quitter();

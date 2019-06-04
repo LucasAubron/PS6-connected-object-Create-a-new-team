@@ -28,8 +28,8 @@ public class FileAttente {
      * @return le nombre de personnes dans la file d'attente
      */
     public int rejoindreFA(){
-        place = nbrAttente;
-        return ++nbrAttente;
+        place = ++nbrAttente;
+        return nbrAttente;
     }
 
     /**
@@ -42,7 +42,7 @@ public class FileAttente {
     }
 
     public boolean estDansLaFile(){
-        return place != -1;
+        return place > 0;
     }
 
     /**
@@ -52,7 +52,7 @@ public class FileAttente {
     public boolean next(){
         nbrAttente--;
         place--;
-        return place == -1;
+        return !estDansLaFile();
     }
 
     /**

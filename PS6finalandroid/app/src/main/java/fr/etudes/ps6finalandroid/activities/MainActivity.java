@@ -76,29 +76,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
         );
         rq.add(arr);
-        /*pour get un seul client
-        JsonObjectRequest obj=new JsonObjectRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("Rest Response", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Rest Response", error.toString());
-                    }
-                }
-        );
-        */
         initSpinner();
-        rejoindre();
-        quitter();
-        moinsFA();
+        initRejoindre();
+        initQuitter();
+        initMoinsFA();
     }
 
     protected void initSpinner() {
@@ -119,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements
         spinner.setAdapter(adapter);
     }
 
-    public void rejoindre(){
+    public void initRejoindre(){
         final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
         final Button btn_quitter = findViewById(R.id.btn_quitter);
 
@@ -133,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    public void quitter(){
+    public void initQuitter(){
         final Button btn_quitter = findViewById(R.id.btn_quitter);
         final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
 
@@ -156,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements
         /* enable le bouton apres avoir changer de file d'attente */
         Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
         Button btn_quitter = findViewById(R.id.btn_quitter);
-        TextView msg_pret = findViewById(R.id.txt_place);
+        TextView msg_pret = findViewById(R.id.txt_ready);
         btn_rejoindre.setEnabled(!listesFileAttente[numFA].estDansLaFile());
         btn_quitter.setEnabled(listesFileAttente[numFA].estDansLaFile());
         msg_pret.setVisibility(View.INVISIBLE);
@@ -172,20 +153,28 @@ public class MainActivity extends AppCompatActivity implements
         textView.setText(Integer.toString(nombre));
     }
 
+    protected void changeEditText(String s){
+        TextView textView = findViewById(R.id.txt_place);
+        textView.setText(s);
+    }
+
     /**
      * Pour faire avancer d'une place une file d'attente
      * @param numFA le numéro de la file d'attente en question
      */
     public void next(int numFA){
         if(listesFileAttente[numFA].next()){
+            //C'est à l'utilisateur de passer
             final Button btnRejoindre = findViewById(R.id.btn_rejoindre);
             btnRejoindre.setEnabled(true);
             final Button btnQuitter = findViewById(R.id.btn_quitter);
             btnQuitter.setEnabled(false);
-            //C'est à l'utilisateur de passer
             TextView msg_pret = findViewById(R.id.txt_ready);
             msg_pret.setVisibility(View.VISIBLE);
+            changeEditText("A vous !");
         }
+        else
+            changeEditText(listesFileAttente[numFA].getPlace());
     }
 
     /**
@@ -210,14 +199,13 @@ public class MainActivity extends AppCompatActivity implements
      * Non final
      * permet au docteur de faire passer le patient suivant
      */
-    public void moinsFA(){
+    public void initMoinsFA(){
         final Button btn_moins = findViewById(R.id.btn_moins);
 
         btn_moins.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 next(numFA);
-                changeEditText(listesFileAttente[numFA].getNbrAttente());
 
             }
         });

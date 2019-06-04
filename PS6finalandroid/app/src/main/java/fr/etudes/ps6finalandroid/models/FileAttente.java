@@ -1,4 +1,4 @@
-package fr.etudes.ps6finalandroid.activities;
+package fr.etudes.ps6finalandroid.models;
 
 public class FileAttente {
     public String getNom() {

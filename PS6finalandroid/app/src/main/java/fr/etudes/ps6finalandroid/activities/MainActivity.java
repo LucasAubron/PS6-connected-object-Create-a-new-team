@@ -2,12 +2,10 @@ package fr.etudes.ps6finalandroid.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,22 +14,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import fr.etudes.ps6finalandroid.R;
+import fr.etudes.ps6finalandroid.models.FileAttente;
 
 public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
@@ -47,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String URL = "http://192.168.99.2:3000/api/clients";
+        String URL = "http://192.168.0.10:3000/api/clients/l1";
         RequestQueue rq= Volley.newRequestQueue(this);
         JsonArrayRequest arr=new JsonArrayRequest(
                 Request.Method.GET,
@@ -59,10 +49,8 @@ public class MainActivity extends AppCompatActivity implements
                         try{
                             for(int i=0;i<response.length();i++){
                                 JSONObject client = response.getJSONObject(i);
-                                String prenom = client.getString("prenom");
-                                String nom = client.getString("nom");
                                 String id = client.getString("id");
-                                System.out.println(nom+" "+prenom+"\n");
+                                System.out.println(id);
                             }
                         } catch (JSONException e){
                             e.printStackTrace();

@@ -174,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void next(int numFA){
         if(listesFileAttente[numFA].next()){
+            final Button btnRejoindre = findViewById(R.id.btn_rejoindre);
+            btnRejoindre.setEnabled(true);
+            final Button btnQuitter = findViewById(R.id.btn_quitter);
+            btnQuitter.setEnabled(false);
             //C'est à l'utilisateur de passer
         }
     }

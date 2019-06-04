@@ -37,37 +37,11 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String URL = "http://192.168.0.10:3000/api/clients/l1";
-        RequestQueue rq= Volley.newRequestQueue(this);
-        JsonArrayRequest arr=new JsonArrayRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try{
-                            for(int i=0;i<response.length();i++){
-                                JSONObject client = response.getJSONObject(i);
-                                String id = client.getString("id");
-                                System.out.println(id);
-                            }
-                        } catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error){
-                    }
-                }
-        );
-        rq.add(arr);
         initSpinner();
         initRejoindre();
         initQuitter();
         initMoinsFA();
+        //checkMaj();
     }
 
     protected void initSpinner() {

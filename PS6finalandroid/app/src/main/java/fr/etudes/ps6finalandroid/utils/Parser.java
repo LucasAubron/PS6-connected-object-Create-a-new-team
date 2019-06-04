@@ -1,4 +1,4 @@
-package fr.etudes.ps6finalandroid.Util;
+package fr.etudes.ps6finalandroid.utils;
 
 import android.content.Context;
 

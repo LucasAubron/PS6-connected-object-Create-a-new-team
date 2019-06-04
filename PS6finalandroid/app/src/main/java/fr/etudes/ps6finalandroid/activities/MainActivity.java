@@ -1,5 +1,6 @@
 package fr.etudes.ps6finalandroid.activities;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,30 +10,29 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import fr.etudes.ps6finalandroid.R;
-import fr.etudes.ps6finalandroid.Util.Parser;
+import fr.etudes.ps6finalandroid.utils.Parser;
 import fr.etudes.ps6finalandroid.models.FileAttente;
+import fr.etudes.ps6finalandroid.utils.Utils;
 
-public class MainActivity extends AppCompatActivity implements
-        AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     int numFA = 0;
     String fileName = "src";
-
-    FileAttente[] listesFileAttente = {new FileAttente("Cinéma", 2), new FileAttente("Stage Airbus",6),
-        new FileAttente("Dentiste", 4), new FileAttente("Bibliothèque Universitaire", 10)};
-
+    /*
+    private FileAttente[] listesFileAttente={
+            new FileAttente("Médecin1", Utils.getList(1, this.getApplicationContext()).size()),
+            new FileAttente("Médecin2",Utils.getList(2, this.getApplicationContext()).size()),
+            new FileAttente("Médecin3", Utils.getList(3, this.getApplicationContext()).size()),
+            new FileAttente("Médecin4", Utils.getList(4, this.getApplicationContext()).size())
+    };
+    */
+    private FileAttente[] listesFileAttente= {
+            new FileAttente("Médecin1", 2),
+            new FileAttente("Médecin2", 2),
+            new FileAttente("Médecin3", 2),
+            new FileAttente("Médecin4", 2)
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

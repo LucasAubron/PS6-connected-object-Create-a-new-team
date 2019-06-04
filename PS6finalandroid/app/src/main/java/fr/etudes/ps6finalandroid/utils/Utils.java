@@ -1,5 +1,6 @@
 package fr.etudes.ps6finalandroid.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
 

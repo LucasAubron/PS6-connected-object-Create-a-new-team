@@ -21,13 +21,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.etudes.ps6finalandroid.R;
+import fr.etudes.ps6finalandroid.Util.Parser;
 import fr.etudes.ps6finalandroid.models.FileAttente;
 
 public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
-    Spinner spinner;
     int numFA = 0;
+    String fileName = "src";
 
     FileAttente[] listesFileAttente = {new FileAttente("Cinéma", 2), new FileAttente("Stage Airbus",6),
         new FileAttente("Dentiste", 4), new FileAttente("Bibliothèque Universitaire", 10)};
@@ -41,12 +42,32 @@ public class MainActivity extends AppCompatActivity implements
         initRejoindre();
         initQuitter();
         initMoinsFA();
-        //checkMaj();
+        Parser parser = new Parser(fileName);
+        byte[] bytes = parser.read(getApplicationContext(), listesFileAttente.length+1);
+        setFA((int)bytes[0]);
+        for (int i = 1; i != bytes.length; i++){
+            if (bytes[i] == (byte)1) {
+                changeEditText(listesFileAttente[i-1].rejoindreFA());
+                demanderServeurPlace(i - 1);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Parser parser = new Parser(fileName);
+        byte[] bytes = new byte[listesFileAttente.length+1];
+        bytes[0] = (byte)numFA;
+        for (int i = 1; i != bytes.length; i++){
+            bytes[i] = listesFileAttente[i-1].estDansLaFile() ? (byte)1 : (byte)0;
+        }
+        parser.write(bytes, getApplicationContext());
     }
 
     protected void initSpinner() {
         //Récupération du Spinner déclaré dans le fichier main.xml de res/layout
-        spinner = findViewById(R.id.spinner_listes);
+        Spinner spinner = findViewById(R.id.spinner_listes);
 
         spinner.setOnItemSelectedListener(this);
 
@@ -92,22 +113,53 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        numFA = position;
+    public void setFA(int numFA){
+        this.numFA = numFA;
+        Spinner spinner = findViewById(R.id.spinner_listes);
+        spinner.setSelection(numFA);
+    }
+
+    /**
+     * Pour changer de file d'attente
+     * NE change pas l'item dans le spinner ni la variable globalle numFA
+     */
+    private void changeFA(){
         changeEditText(listesFileAttente[numFA].getNbrAttente());
         /* enable le bouton apres avoir changer de file d'attente */
         Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
         Button btn_quitter = findViewById(R.id.btn_quitter);
         TextView msg_pret = findViewById(R.id.txt_ready);
+
         btn_rejoindre.setEnabled(!listesFileAttente[numFA].estDansLaFile());
         btn_quitter.setEnabled(listesFileAttente[numFA].estDansLaFile());
         msg_pret.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Lorsqu'un item de la liste est selectionné
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        numFA = position;
+        changeFA();
+    }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    /**
+     * A appeler lorsque l'utilisateur doit passer
+     */
+    private void doitPasser(){
+        final Button btnRejoindre = findViewById(R.id.btn_rejoindre);
+        btnRejoindre.setEnabled(true);
+        final Button btnQuitter = findViewById(R.id.btn_quitter);
+        btnQuitter.setEnabled(false);
+        TextView msg_pret = findViewById(R.id.txt_ready);
+        msg_pret.setVisibility(View.VISIBLE);
+        changeEditText("A vous !");
     }
 
     protected void changeEditText(int nombre){
@@ -127,13 +179,7 @@ public class MainActivity extends AppCompatActivity implements
     public void next(int numFA){
         if(listesFileAttente[numFA].next()){
             //C'est à l'utilisateur de passer
-            final Button btnRejoindre = findViewById(R.id.btn_rejoindre);
-            btnRejoindre.setEnabled(true);
-            final Button btnQuitter = findViewById(R.id.btn_quitter);
-            btnQuitter.setEnabled(false);
-            TextView msg_pret = findViewById(R.id.txt_ready);
-            msg_pret.setVisibility(View.VISIBLE);
-            changeEditText("A vous !");
+            doitPasser();
         }
         else
             changeEditText(listesFileAttente[numFA].getPlace());
@@ -171,5 +217,9 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    public void demanderServeurPlace(int listeNum){
+
     }
 }

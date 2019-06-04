@@ -38,7 +38,7 @@ public class FileAttente {
      */
     public int quitterFA(){
         place = -1;
-        return --nbrAttente;
+        return decrementerNbrAttente();
     }
 
     public boolean estDansLaFile(){
@@ -50,7 +50,7 @@ public class FileAttente {
      * @return true si l'utilisateur est celui qui passe
      */
     public boolean next(){
-        nbrAttente--;
+        decrementerNbrAttente();
         place--;
         return !estDansLaFile();
     }
@@ -70,7 +70,12 @@ public class FileAttente {
     public void retirerPersonneFA(int placePersonne){
         if (placePersonne < place)
             place--;
-            nbrAttente--;
+        decrementerNbrAttente();
+    }
+
+    private int decrementerNbrAttente(){
+        if (nbrAttente > 0) nbrAttente--;
+        return nbrAttente;
     }
 
 

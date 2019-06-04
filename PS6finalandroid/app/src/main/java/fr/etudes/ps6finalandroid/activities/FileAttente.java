@@ -66,13 +66,11 @@ public class FileAttente {
      * Retire une personne de la file d'attente
      * /*\ A ne pas utiliser pour retirer l'utilisateur
      * @param placePersonne la place de la personne
-     * @return si c'est à l'utilisateur de passer
      */
-    public boolean retirerPersonneFA(int placePersonne){
+    public void retirerPersonneFA(int placePersonne){
         if (placePersonne < place)
             place--;
         nbrAttente--;
-        return place == -1;
     }
 
 

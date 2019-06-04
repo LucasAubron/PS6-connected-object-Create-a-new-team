@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -164,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     protected void changeEditText(int nombre){
-        EditText editText = findViewById(R.id.txt_name);
-        editText.setText(Integer.toString(nombre));
+        TextView textView = findViewById(R.id.txt_place);
+        textView.setText(Integer.toString(nombre));
     }
 
     /**

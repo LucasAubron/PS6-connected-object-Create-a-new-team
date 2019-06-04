@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/' , (req, res) => {
   try {
     const client = Client.create(Object.assign({}, req.body));
     res.status(201).json(client);

@@ -18,12 +18,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import fr.etudes.ps6finalandroid.R;
@@ -44,8 +52,39 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String URL = "http://172.19.250.11:3000/api/clients";
+        String URL = "http://192.168.99.2:3000/api/clients";
         RequestQueue rq= Volley.newRequestQueue(this);
+        /*
+        JsonArrayRequest arr=new JsonArrayRequest(
+                Request.Method.GET,
+                null,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                            for(int i=0;i<response.length();i++){
+                                JSONObject student = response.getJSONObject(i);
+                                String prenom = student.getString("prenom");
+                                String nom = student.getString("nom");
+                                String id = student.getString("id");
+
+                                // Display the formatted json data in text view
+                                mTextView.append(firstName +" " + lastName +"\nAge : " + age);
+                                mTextView.append("\n\n");
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                    }
+                }
+        );
+        */
+        /*
         JsonObjectRequest obj=new JsonObjectRequest(
                 Request.Method.GET,
                 URL,
@@ -63,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
         );
-        rq.add(obj);
+        */
+        //rq.add(obj);
         initSpinner();
         rejoindre();
         quitter();

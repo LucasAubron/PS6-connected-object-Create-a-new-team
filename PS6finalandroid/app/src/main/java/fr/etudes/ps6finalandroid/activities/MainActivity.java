@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -164,7 +165,39 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     protected void changeEditText(int nombre){
-        EditText editText = findViewById(R.id.txt_name);
-        editText.setText(Integer.toString(nombre));
+        TextView textView = findViewById(R.id.txt_place);
+        textView.setText(Integer.toString(nombre));
+    }
+
+    /**
+     * Pour faire avancer d'une place une file d'attente
+     * @param numFA le numéro de la file d'attente en question
+     */
+    public void next(int numFA){
+        if(listesFileAttente[numFA].next()){
+            final Button btnRejoindre = findViewById(R.id.btn_rejoindre);
+            btnRejoindre.setEnabled(true);
+            final Button btnQuitter = findViewById(R.id.btn_quitter);
+            btnQuitter.setEnabled(false);
+            //C'est à l'utilisateur de passer
+        }
+    }
+
+    /**
+     * Pour ajouter une personne à la fin d'une file d'attente
+     * @param numFA le numéro de la file d'attente en question
+     */
+    public void ajouterPersonneFA(int numFA){
+        listesFileAttente[numFA].ajouterPersonneFA();
+    }
+
+    /**
+     * Retire une personne de la file d'attente
+     * /*\ A ne pas utiliser pour retirer l'utilisateur
+     * @Param numFA le numéro de la file d'attente en question
+     * @Param numPersonne le numéro de la personne qui se retire dans la file d'attente
+     */
+    public void retirerPersonneFA(int numFA, int numPersonne){
+        listesFileAttente[numFA].retirerPersonneFA(numPersonne);
     }
 }

@@ -20,7 +20,7 @@ public class FileAttente {
     public FileAttente(String nom, int nbrAttente){
         this.nom = nom;
         this.nbrAttente = nbrAttente;
-        this.place = 0;
+        this.place = -1;
     }
 
     /**
@@ -37,11 +37,47 @@ public class FileAttente {
      * @return le nombre de personnes dans la file d'attente
      */
     public int quitterFA(){
-        place = 0;
+        place = -1;
         return --nbrAttente;
     }
 
     public boolean estDansLaFile(){
-        return place != 0;
+        return place != -1;
+    }
+
+    /**
+     * Méthode à utiliser lorsque le premier de la file passe
+     * @return true si l'utilisateur est celui qui passe
+     */
+    public boolean next(){
+        nbrAttente--;
+        place--;
+        return place == -1;
+    }
+
+    /**
+     * Ajoute une personne à la fin de la file d'attente
+     */
+    public void ajouterPersonneFA(){
+        nbrAttente++;
+    }
+
+    /**
+     * Retire une personne de la file d'attente
+     * /*\ A ne pas utiliser pour retirer l'utilisateur
+     * @param placePersonne la place de la personne
+     * @return si c'est à l'utilisateur de passer
+     */
+    public boolean retirerPersonneFA(int placePersonne){
+        if (placePersonne < place)
+            place--;
+        nbrAttente--;
+        return place == -1;
+    }
+
+
+    @Override
+    public String toString(){
+        return nom;
     }
 }

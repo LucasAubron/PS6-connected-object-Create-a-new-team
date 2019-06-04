@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".activities.MainActivity">
 
     <Button
         android:id="@+id/btn_rejoindre"
         android:layout_width="270dp"
         android:layout_height="65dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="52dp"
         android:text="Rejoindre file d'attente"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_place" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_ready" />
 
     <Button
         android:id="@+id/btn_quitter"
@@ -32,7 +33,7 @@
         android:id="@+id/txt_nomFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="64dp"
         android:text="Votre place :"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +64,7 @@
         android:id="@+id/txt_place"
         android:layout_width="72dp"
         android:layout_height="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Place"
         android:textSize="27sp"
@@ -71,5 +72,29 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_nomFile" />
+
+    <TextView
+        android:id="@+id/txt_ready"
+        android:layout_width="275dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="C'est à vous ! \nMerci d'avoir patienté"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_place" />
+
+    <Button
+        android:id="@+id/btn_moins"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="212dp"
+        android:layout_marginEnd="48dp"
+        android:text="GO"
+        app:layout_constraintEnd_toStartOf="@+id/txt_place"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

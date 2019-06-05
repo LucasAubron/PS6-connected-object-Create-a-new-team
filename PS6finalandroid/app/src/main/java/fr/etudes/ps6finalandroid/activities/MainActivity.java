@@ -1,6 +1,5 @@
 package fr.etudes.ps6finalandroid.activities;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +9,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+
+import java.util.concurrent.TimeUnit;
+
 import fr.etudes.ps6finalandroid.R;
 import fr.etudes.ps6finalandroid.utils.Parser;
 import fr.etudes.ps6finalandroid.models.FileAttente;
+import fr.etudes.ps6finalandroid.utils.ServerCallBack;
 import fr.etudes.ps6finalandroid.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -20,34 +24,46 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     int numFA = 0;
     String fileName = "src";
 
-    private FileAttente[] listesFileAttente={
-            new FileAttente("Médecin1", Utils.getList(1, this).size()),
-            new FileAttente("Médecin2", Utils.getList(2, this).size()),
-            new FileAttente("Médecin3", Utils.getList(3, this).size()),
-            new FileAttente("Médecin4", Utils.getList(4, this).size())
-    };
-    /*
-    private FileAttente[] listesFileAttente= {
-            new FileAttente("Médecin1", 2),
-            new FileAttente("Médecin2", 2),
-            new FileAttente("Médecin3", 2),
-            new FileAttente("Médecin4", 2)
-    };
-    */
+    private FileAttente[] listeFileAttente= new FileAttente[4];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Utils.get( 1,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray response) {
+                listeFileAttente[0] = new FileAttente("Médecin1", response.length());
+            }});
+        Utils.get( 2,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray response) {
+                listeFileAttente[1] = new FileAttente("Médecin2", response.length());
+            }});
+        Utils.get( 3,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray response) {
+                listeFileAttente[2] = new FileAttente("Médecin3", response.length());
+            }});
+        Utils.get( 4,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray response) {
+                listeFileAttente[3] = new FileAttente("Médecin4", response.length());
+            }});
+        try {
+            TimeUnit.MILLISECONDS.sleep(46);
+        } catch(Exception e) {
+        }
         initSpinner();
         initRejoindre();
         initQuitter();
         initMoinsFA();
         Parser parser = new Parser(fileName);
-        byte[] bytes = parser.read(getApplicationContext(), listesFileAttente.length+1);
+        byte[] bytes = parser.read(getApplicationContext(), listeFileAttente.length+1);
         setFA((int)bytes[0]);
         for (int i = 1; i != bytes.length; i++){
             if (bytes[i] == (byte)1) {
-                changeEditText(listesFileAttente[i-1].rejoindreFA());
+                changeEditText(listeFileAttente[i-1].rejoindreFA());
                 demanderServeurPlace(i - 1);
             }
         }
@@ -57,10 +73,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onDestroy(){
         super.onDestroy();
         Parser parser = new Parser(fileName);
-        byte[] bytes = new byte[listesFileAttente.length+1];
+        byte[] bytes = new byte[listeFileAttente.length+1];
         bytes[0] = (byte)numFA;
         for (int i = 1; i != bytes.length; i++){
-            bytes[i] = listesFileAttente[i-1].estDansLaFile() ? (byte)1 : (byte)0;
+            bytes[i] = listeFileAttente[i-1].estDansLaFile() ? (byte)1 : (byte)0;
         }
         parser.write(bytes, getApplicationContext());
     }
@@ -71,10 +87,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         spinner.setOnItemSelectedListener(this);
 
-        ArrayAdapter adapter = new ArrayAdapter(
+        ArrayAdapter<FileAttente> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                listesFileAttente
+                listeFileAttente
         );
 
         /* On definit une présentation du spinner quand il est déroulé         (android.R.layout.simple_spinner_dropdown_item) */
@@ -90,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         btn_rejoindre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeEditText(listesFileAttente[numFA].rejoindreFA());
+                changeEditText(listeFileAttente[numFA].rejoindreFA());
                 btn_rejoindre.setEnabled(false);
                 btn_quitter.setEnabled(true);
             }
@@ -105,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         btn_quitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeEditText(listesFileAttente[numFA].quitterFA());
+                changeEditText(listeFileAttente[numFA].quitterFA());
                 btn_quitter.setEnabled(false);
                 btn_rejoindre.setEnabled(true);
 
@@ -124,14 +140,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * NE change pas l'item dans le spinner ni la variable globalle numFA
      */
     private void changeFA(){
-        changeEditText(listesFileAttente[numFA].getNbrAttente());
+        changeEditText(listeFileAttente[numFA].getNbrAttente());
         /* enable le bouton apres avoir changer de file d'attente */
         Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
         Button btn_quitter = findViewById(R.id.btn_quitter);
         TextView msg_pret = findViewById(R.id.txt_ready);
 
-        btn_rejoindre.setEnabled(!listesFileAttente[numFA].estDansLaFile());
-        btn_quitter.setEnabled(listesFileAttente[numFA].estDansLaFile());
+        btn_rejoindre.setEnabled(!listeFileAttente[numFA].estDansLaFile());
+        btn_quitter.setEnabled(listeFileAttente[numFA].estDansLaFile());
         msg_pret.setVisibility(View.INVISIBLE);
     }
 
@@ -177,12 +193,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @param numFA le numéro de la file d'attente en question
      */
     public void next(int numFA){
-        if(listesFileAttente[numFA].next()){
+        if(listeFileAttente[numFA].next()){
             //C'est à l'utilisateur de passer
             doitPasser();
         }
         else
-            changeEditText(listesFileAttente[numFA].getPlace());
+            changeEditText(listeFileAttente[numFA].getPlace());
     }
 
     /**
@@ -190,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @param numFA le numéro de la file d'attente en question
      */
     public void ajouterPersonneFA(int numFA){
-        listesFileAttente[numFA].ajouterPersonneFA();
+        listeFileAttente[numFA].ajouterPersonneFA();
     }
 
     /**
@@ -200,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @Param numPersonne le numéro de la personne qui se retire dans la file d'attente
      */
     public void retirerPersonneFA(int numFA, int numPersonne){
-        listesFileAttente[numFA].retirerPersonneFA(numPersonne);
+        listeFileAttente[numFA].retirerPersonneFA(numPersonne);
     }
 
     /**

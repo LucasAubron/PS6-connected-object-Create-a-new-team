@@ -51,7 +51,8 @@ public class FileAttente {
      */
     public boolean next(){
         decrementerNbrAttente();
-        place--;
+        if (estDansLaFile())
+            place--;
         return !estDansLaFile();
     }
 

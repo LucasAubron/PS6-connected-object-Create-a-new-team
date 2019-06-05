@@ -1,6 +1,5 @@
 package fr.etudes.ps6finalandroid.activities;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,20 +19,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     int numFA = 0;
     String fileName = "src";
     private FileAttente[] listesFileAttente= new FileAttente[4];
-    /*
-            new FileAttente("Médecin1", Utils.getList(1, this.getApplicationContext()).size()),
-            new FileAttente("Médecin2",Utils.getList(2, this.getApplicationContext()).size()),
-            new FileAttente("Médecin3", Utils.getList(3, this.getApplicationContext()).size()),
-            new FileAttente("Médecin4", Utils.getList(4, this.getApplicationContext()).size())
-    };
-    /*
-    private FileAttente[] listesFileAttente= {
-            new FileAttente("Médecin1", 2),
-            new FileAttente("Médecin2", 2),
-            new FileAttente("Médecin3", 2),
-            new FileAttente("Médecin4", 2)
-    };
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         initRejoindre();
         initQuitter();
         initMoinsFA();
+
         Parser parser = new Parser(fileName);
         byte[] bytes = parser.read(getApplicationContext(), listesFileAttente.length+1);
         setFA((int)bytes[0]);
@@ -58,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    /**
+     * Modèle pour le parseur:
+     * Le premier byte indique la file ou l'utilisateur à quitté l'application
+     * Ensuite chaque byte indique s'il était dans cette file ou pas (1 = oui, 0 = non)
+     */
     @Override
     protected void onDestroy(){
         super.onDestroy();
@@ -117,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
+
 
     public void setFA(int numFA){
         this.numFA = numFA;

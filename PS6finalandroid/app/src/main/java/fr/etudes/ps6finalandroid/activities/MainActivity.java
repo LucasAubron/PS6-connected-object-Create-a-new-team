@@ -9,7 +9,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.RequestFuture;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,23 +35,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         Utils.get( 1,this, new ServerCallBack(){
             @Override
-            public void onSuccess(JSONArray response) {
-                listeFileAttente[0] = new FileAttente("Médecin1", response.length());
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[0] = new FileAttente("Médecin1", responseArray.length(), 1);
             }});
         Utils.get( 2,this, new ServerCallBack(){
             @Override
-            public void onSuccess(JSONArray response) {
-                listeFileAttente[1] = new FileAttente("Médecin2", response.length());
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[1] = new FileAttente("Médecin2", responseArray.length(), 2);
             }});
         Utils.get( 3,this, new ServerCallBack(){
             @Override
-            public void onSuccess(JSONArray response) {
-                listeFileAttente[2] = new FileAttente("Médecin3", response.length());
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[2] = new FileAttente("Médecin3", responseArray.length(), 3);
             }});
         Utils.get( 4,this, new ServerCallBack(){
             @Override
-            public void onSuccess(JSONArray response) {
-                listeFileAttente[3] = new FileAttente("Médecin4", response.length());
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[3] = new FileAttente("Médecin4", responseArray.length(), 4);
             }});
         try {
             TimeUnit.MILLISECONDS.sleep(46);
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setFA((int)bytes[0]);
         for (int i = 1; i != bytes.length; i++){
             if (bytes[i] == (byte)1) {
-                changeEditText(listeFileAttente[i-1].rejoindreFA());
+                changeEditText(listeFileAttente[i-1].rejoindreFA(this));
                 demanderServeurPlace(i - 1);
             }
         }
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         btn_rejoindre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeEditText(listeFileAttente[numFA].rejoindreFA());
+                changeEditText(listeFileAttente[numFA].rejoindreFA(this));
                 btn_rejoindre.setEnabled(false);
                 btn_quitter.setEnabled(true);
             }

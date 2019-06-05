@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonArray;
 
@@ -39,7 +40,30 @@ public class Utils {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        cb.onSuccess(response);
+                        cb.onSuccess(response, null);
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        error.printStackTrace();
+                    }
+                }
+        );
+        if (rq==null) {
+            rq = Volley.newRequestQueue(context);
+        }
+        rq.add(request);
+    }
+
+    public static void post(final int idList, Context context, String data){
+        StringRequest request=new StringRequest(
+                Request.Method.POST,
+                URL + "l" + idList,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
                     }
                 },
                 new Response.ErrorListener(){

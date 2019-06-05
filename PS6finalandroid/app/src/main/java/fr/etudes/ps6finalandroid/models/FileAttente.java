@@ -1,5 +1,12 @@
 package fr.etudes.ps6finalandroid.models;
 
+import android.content.Context;
+
+import org.json.JSONArray;
+
+import fr.etudes.ps6finalandroid.utils.ServerCallBack;
+import fr.etudes.ps6finalandroid.utils.Utils;
+
 public class FileAttente {
     public String getNom() {
         return nom;
@@ -16,19 +23,22 @@ public class FileAttente {
     private String nom;
     private int nbrAttente;
     private int place;
+    private int id;
 
-    public FileAttente(String nom, int nbrAttente){
+    public FileAttente(String nom, int nbrAttente, int id){
         this.nom = nom;
         this.nbrAttente = nbrAttente;
         this.place = -1;
+        this.id=id;
     }
 
     /**
      * Permet de rejoindre la file d'attente
      * @return le nombre de personnes dans la file d'attente
      */
-    public int rejoindreFA(){
-        place = ++nbrAttente;
+    public int rejoindreFA(Context context){
+        String req = "";
+        Utils.post(this.id, context, req);
         return nbrAttente;
     }
 

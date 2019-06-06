@@ -8,7 +8,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-app.get('/ajouterNum', function(req, res){///ajouterNum?numero=
+app.post('/ajouterNum', function(req, res){///ajouterNum?numero=
     console.log("Ajout de numéro");
     var num = req.query.numero;
     liste.push(num);

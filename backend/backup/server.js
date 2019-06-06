@@ -56,7 +56,6 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
     if (liste.length > 0) {
         var json = jsonSauf(liste[0]);
         liste.shift();
-        //Création du json
         res.json(json);
     }
 }).get('/supprNum', function (req, res) {///supprNum?numero=
@@ -69,12 +68,23 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
     }
 }).get('/getInfoBase', function (req, res) {///getInfoBase?numero=
     console.log("Info de base demandées");
-    res.json({
-        "numero": req.query.numero,
-        "texte": "Taille de la file",
-        "nombre": liste.length,
-        "texte_bouton": "Rejoindre la file"
-    })
+    var position = liste.indexOf(req.query.numero);
+    if (position != -1) {
+        res.json({
+            "numero": req.query.numero,
+            "texte": "Votre place",
+            "nombre": position,
+            "texte_bouton": "Quitter la file"
+        })
+    }
+    else {
+        res.json({
+            "numero": req.query.numero,
+            "texte": "Taille de la file",
+            "nombre": liste.length,
+            "texte_bouton": "Rejoindre la file"
+        })
+    }
 });
 
 var server = app.listen(3000, function () {

@@ -3,13 +3,17 @@ package fr.etudes.ps6finalandroid.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,77 +21,61 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
-public final class Utils {
-    private static String URL = "http://192.168.0.10:3000/api/clients/l1";
+public class Utils {
+    private static String URL = "http://192.168.0.10:3000/api/clients/";
+    private static RequestQueue rq = null;
+    private static int res;
+
     private Utils() {
     }
 
-    public static ArrayList<Integer> getList(int idList, final Context context){
-        final ArrayList res = new ArrayList();
-        if (idList<1 || idList>4) throw new RuntimeException("l'id de liste demandé est erroné");
-        JsonArrayRequest arr=new JsonArrayRequest(
+    public static void get(final int idList, final Context context, final ServerCallBack cb){
+        JsonArrayRequest request=new JsonArrayRequest(
                 Request.Method.GET,
-                URL,
+                URL + "l" + idList,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try{
-                            for(int i=0;i<response.length();i++){
-                                JSONObject client = response.getJSONObject(i);
-                                Integer phoneId = client.getInt("phoneId");
-                                res.add(phoneId);
-                            }
-                        } catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                        cb.onSuccess(response, null);
                     }
                 },
                 new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error){
+                        error.printStackTrace();
                     }
                 }
         );
-        RequestQueue rq= Volley.newRequestQueue(context);
-        rq.add(arr);
-        return res;
+        if (rq==null) {
+            rq = Volley.newRequestQueue(context);
+        }
+        rq.add(request);
     }
 
-    public static int getPosInList(int idList, final Context context){
-        if (idList<1 || idList>4) throw new RuntimeException("l'id de liste demandé est erroné");
-        final ArrayList<Integer> res = new ArrayList();
-        res.add(-1);
-        JsonArrayRequest arr=new JsonArrayRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONArray>() {
+    public static void post(final int idList, Context context, String data){
+        StringRequest request=new StringRequest(
+                Request.Method.POST,
+                URL + "l" + idList,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        int id = Integer.parseInt(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-                        try{
-                            for(int i=0;i<response.length();i++){
-                                JSONObject client = response.getJSONObject(i);
-                                if (id == client.getInt("phoneId")){
-                                    res.add(i+1);
-                                    break;
-                                }
-                            }
-                        } catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                    public void onResponse(String response) {
+
                     }
                 },
                 new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error){
+                        error.printStackTrace();
                     }
                 }
         );
-        RequestQueue rq= Volley.newRequestQueue(context);
-        rq.add(arr);
-        return res.get(res.size()-1);
+        if (rq==null) {
+            rq = Volley.newRequestQueue(context);
+        }
+        rq.add(request);
     }
 }

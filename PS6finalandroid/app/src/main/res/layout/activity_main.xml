@@ -8,93 +8,43 @@
     tools:context=".activities.MainActivity">
 
     <Button
-        android:id="@+id/btn_rejoindre"
+        android:id="@+id/bouton"
         android:layout_width="270dp"
         android:layout_height="65dp"
-        android:layout_marginTop="52dp"
-        android:text="Rejoindre file d'attente"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_ready" />
-
-    <Button
-        android:id="@+id/btn_quitter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Quitter la file d'attente"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_rejoindre" />
-
-    <TextView
-        android:id="@+id/txt_nomFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="Votre place :"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_listes" />
-
-    <Spinner
-        android:id="@+id/spinner_listes"
-        android:layout_width="301dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="88dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Choisir une file d'attente :"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txt_place"
-        android:layout_width="72dp"
-        android:layout_height="40dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Bouton"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre"
+        app:layout_constraintVertical_bias="0.423" />
+
+    <TextView
+        android:id="@+id/texte"
+        android:layout_width="222dp"
+        android:layout_height="116dp"
+        android:layout_marginTop="96dp"
+        android:text="Texte"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="113dp"
+        android:layout_height="78dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="Place"
+        android:text="0"
         android:textSize="27sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_nomFile" />
-
-    <TextView
-        android:id="@+id/txt_ready"
-        android:layout_width="275dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="C'est à vous ! \nMerci d'avoir patienté"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="24sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_place" />
-
-    <Button
-        android:id="@+id/btn_moins"
-        android:layout_width="65dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="212dp"
-        android:layout_marginEnd="48dp"
-        android:text="GO"
-        app:layout_constraintEnd_toStartOf="@+id/txt_place"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/texte" />
 
 </android.support.constraint.ConstraintLayout>

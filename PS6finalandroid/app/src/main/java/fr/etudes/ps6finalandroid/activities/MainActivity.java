@@ -3,220 +3,72 @@ package fr.etudes.ps6finalandroid.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import fr.etudes.ps6finalandroid.R;
-import fr.etudes.ps6finalandroid.utils.Parser;
-import fr.etudes.ps6finalandroid.models.FileAttente;
-import fr.etudes.ps6finalandroid.utils.Utils;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-    int numFA = 0;
-    String fileName = "src";
-    private FileAttente[] listesFileAttente= new FileAttente[4];
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listesFileAttente[0] = new FileAttente("Médecin1", Utils.getList(1, getApplicationContext()).size());
-        listesFileAttente[1] = new FileAttente("Médecin2", Utils.getList(2, getApplicationContext()).size());
-        listesFileAttente[2] = new FileAttente("Médecin3", Utils.getList(3, getApplicationContext()).size());
-        listesFileAttente[3] = new FileAttente("Médecin4", Utils.getList(4, getApplicationContext()).size());
-        initSpinner();
-        initRejoindre();
-        initQuitter();
-        initMoinsFA();
-
-        Parser parser = new Parser(fileName);
-        byte[] bytes = parser.read(getApplicationContext(), listesFileAttente.length+1);
-        setFA((int)bytes[0]);
-        for (int i = 1; i != bytes.length; i++){
-            if (bytes[i] == (byte)1) {
-                changeEditText(listesFileAttente[i-1].rejoindreFA());
-                demanderServeurPlace(i - 1);
-            }
+        Button bouton = findViewById(R.id.bouton);
+        bouton.setVisibility(View.INVISIBLE);
+        /*
+        Utils.get( 1,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[0] = new FileAttente("Médecin1", responseArray.length(), 1);
+            }});
+        Utils.get( 2,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[1] = new FileAttente("Médecin2", responseArray.length(), 2);
+            }});
+        Utils.get( 3,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[2] = new FileAttente("Médecin3", responseArray.length(), 3);
+            }});
+        Utils.get( 4,this, new ServerCallBack(){
+            @Override
+            public void onSuccess(JSONArray responseArray, JSONObject response) {
+                listeFileAttente[3] = new FileAttente("Médecin4", responseArray.length(), 4);
+            }});
+        try {
+            TimeUnit.MILLISECONDS.sleep(46);
+        } catch(Exception e) {
         }
+        */
     }
 
-    /**
-     * Modèle pour le parseur:
-     * Le premier byte indique la file ou l'utilisateur à quitté l'application
-     * Ensuite chaque byte indique s'il était dans cette file ou pas (1 = oui, 0 = non)
-     */
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        Parser parser = new Parser(fileName);
-        byte[] bytes = new byte[listesFileAttente.length+1];
-        bytes[0] = (byte)numFA;
-        for (int i = 1; i != bytes.length; i++){
-            bytes[i] = listesFileAttente[i-1].estDansLaFile() ? (byte)1 : (byte)0;
-        }
-        parser.write(bytes, getApplicationContext());
     }
 
-    protected void initSpinner() {
-        //Récupération du Spinner déclaré dans le fichier main.xml de res/layout
-        Spinner spinner = findViewById(R.id.spinner_listes);
-
-        spinner.setOnItemSelectedListener(this);
-
-        ArrayAdapter adapter = new ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_item,
-                listesFileAttente
-        );
-
-        /* On definit une présentation du spinner quand il est déroulé         (android.R.layout.simple_spinner_dropdown_item) */
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Enfin on passe l'adapter au Spinner et c'est tout
-        spinner.setAdapter(adapter);
-    }
-
-    public void initRejoindre(){
-        final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
-        final Button btn_quitter = findViewById(R.id.btn_quitter);
-
-        btn_rejoindre.setOnClickListener(new View.OnClickListener() {
+    private void activerBouton(String texte){
+        Button bouton = findViewById(R.id.bouton);
+        bouton.setText(texte);
+        bouton.setVisibility(View.VISIBLE);
+        bouton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeEditText(listesFileAttente[numFA].rejoindreFA());
-                btn_rejoindre.setEnabled(false);
-                btn_quitter.setEnabled(true);
+                //Back end
             }
         });
     }
 
-    public void initQuitter(){
-        final Button btn_quitter = findViewById(R.id.btn_quitter);
-        final Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
-
-        btn_quitter.setEnabled(false);
-        btn_quitter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeEditText(listesFileAttente[numFA].quitterFA());
-                btn_quitter.setEnabled(false);
-                btn_rejoindre.setEnabled(true);
-
-            }
-        });
+    private void changerTexte(String s){
+        TextView texte = findViewById(R.id.texte);
+        texte.setText(s);
     }
 
-
-    public void setFA(int numFA){
-        this.numFA = numFA;
-        Spinner spinner = findViewById(R.id.spinner_listes);
-        spinner.setSelection(numFA);
+    private void changerNombre(int n){
+        TextView nombre = findViewById(R.id.nombre);
+        nombre.setText(String.valueOf(n));
     }
 
-    /**
-     * Pour changer de file d'attente
-     * NE change pas l'item dans le spinner ni la variable globalle numFA
-     */
-    private void changeFA(){
-        changeEditText(listesFileAttente[numFA].getNbrAttente());
-        /* enable le bouton apres avoir changer de file d'attente */
-        Button btn_rejoindre = findViewById(R.id.btn_rejoindre);
-        Button btn_quitter = findViewById(R.id.btn_quitter);
-        TextView msg_pret = findViewById(R.id.txt_ready);
-
-        btn_rejoindre.setEnabled(!listesFileAttente[numFA].estDansLaFile());
-        btn_quitter.setEnabled(listesFileAttente[numFA].estDansLaFile());
-        msg_pret.setVisibility(View.INVISIBLE);
-    }
-
-    /**
-     * Lorsqu'un item de la liste est selectionné
-     */
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        numFA = position;
-        changeFA();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    /**
-     * A appeler lorsque l'utilisateur doit passer
-     */
-    private void doitPasser(){
-        final Button btnRejoindre = findViewById(R.id.btn_rejoindre);
-        btnRejoindre.setEnabled(true);
-        final Button btnQuitter = findViewById(R.id.btn_quitter);
-        btnQuitter.setEnabled(false);
-        TextView msg_pret = findViewById(R.id.txt_ready);
-        msg_pret.setVisibility(View.VISIBLE);
-        changeEditText("A vous !");
-    }
-
-    protected void changeEditText(int nombre){
-        TextView textView = findViewById(R.id.txt_place);
-        textView.setText(Integer.toString(nombre));
-    }
-
-    protected void changeEditText(String s){
-        TextView textView = findViewById(R.id.txt_place);
-        textView.setText(s);
-    }
-
-    /**
-     * Pour faire avancer d'une place une file d'attente
-     * @param numFA le numéro de la file d'attente en question
-     */
-    public void next(int numFA){
-        if(listesFileAttente[numFA].next()){
-            //C'est à l'utilisateur de passer
-            doitPasser();
-        }
-        else
-            changeEditText(listesFileAttente[numFA].getPlace());
-    }
-
-    /**
-     * Pour ajouter une personne à la fin d'une file d'attente
-     * @param numFA le numéro de la file d'attente en question
-     */
-    public void ajouterPersonneFA(int numFA){
-        listesFileAttente[numFA].ajouterPersonneFA();
-    }
-
-    /**
-     * Retire une personne de la file d'attente
-     * /*\ A ne pas utiliser pour retirer l'utilisateur
-     * @Param numFA le numéro de la file d'attente en question
-     * @Param numPersonne le numéro de la personne qui se retire dans la file d'attente
-     */
-    public void retirerPersonneFA(int numFA, int numPersonne){
-        listesFileAttente[numFA].retirerPersonneFA(numPersonne);
-    }
-
-    /**
-     * Non final
-     * permet au docteur de faire passer le patient suivant
-     */
-    public void initMoinsFA(){
-        final Button btn_moins = findViewById(R.id.btn_moins);
-
-        btn_moins.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                next(numFA);
-
-            }
-        });
-    }
-
-    public void demanderServeurPlace(int listeNum){
-
-    }
 }

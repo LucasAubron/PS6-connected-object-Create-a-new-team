@@ -9,14 +9,14 @@ function jsonSauf(num) {
         if (liste[i] != num) {
             obj.push({
                 "numero": liste[i],
-                "nombre": i+1,
+                "nombre": i + 1,
             })
         }
         else {
             obj.push({
                 "numero": num,
                 "texte": "Taille de la file",
-                "nombre": liste.length-1,
+                "nombre": liste.length - 1,
                 "texte_bouton": "Rejoindre la file"
             })
         }
@@ -47,14 +47,31 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
     var numero = req.query.numero;
     res.json({
         "numero": numero,
-        "nombre": liste.indexOf(numero)+1
+        "nombre": liste.indexOf(numero) + 1
     });
 }).get('/suivant', function (req, res) {///suivant
     console.log("Suivant !");
     if (liste.length > 0) {
-        var json = jsonSauf(liste[0]);
         liste.shift();
-        res.json(json);
+        var obj = [];
+        for (var i = 0; i != liste.length; i++) {
+            if (liste[i] != num) {
+                obj.push({
+                    "numero": liste[i],
+                    "nombre": i + 1,
+                })
+            }
+            else {
+                obj.push({
+                    "numero": num,
+                    "texte": "C'est à vous !",
+                    "nombre": 0,
+                    "texte_bouton": "Rejoindre la file"
+                })
+            }
+        }
+        res.json(obj);
+
     }
 }).get('/supprNum', function (req, res) {///supprNum?numero=
     console.log("Suppression de numéro")
@@ -71,7 +88,7 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
         res.json([{
             "numero": req.query.numero,
             "texte": "Votre place",
-            "nombre": position+1,
+            "nombre": position + 1,
             "texte_bouton": "Quitter la file"
         }])
     }

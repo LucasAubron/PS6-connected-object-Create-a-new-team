@@ -11,12 +11,11 @@
         android:id="@+id/publishMessage"
         android:layout_width="124dp"
         android:layout_height="48dp"
-        android:layout_marginTop="436dp"
-        android:layout_marginRight="136dp"
+        android:layout_marginTop="368dp"
         android:text="Publish"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +24,7 @@
         android:layout_width="222dp"
         android:layout_height="116dp"
         android:layout_marginTop="96dp"
+        android:gravity="center"
         android:text="Votre position"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,12 +36,11 @@
         android:id="@+id/nombre"
         android:layout_width="113dp"
         android:layout_height="78dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="44dp"
         android:gravity="center"
         android:text="0"
         android:textSize="27sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/texte" />
 

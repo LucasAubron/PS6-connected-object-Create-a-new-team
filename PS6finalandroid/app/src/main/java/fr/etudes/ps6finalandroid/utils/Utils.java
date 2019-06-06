@@ -25,6 +25,8 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class Utils {
+
+
     private static String URL = "http://192.168.0.10:3000/api/clients/";
     private static RequestQueue rq = null;
     private static int res;
@@ -56,8 +58,8 @@ public class Utils {
         rq.add(request);
     }
 
-    public static void post(final int idList, Context context, String data){
-        StringRequest request=new StringRequest(
+    public static void post(final int idList, Context context, String data) {
+        StringRequest request = new StringRequest(
                 Request.Method.POST,
                 URL + "l" + idList,
                 new Response.Listener<String>() {
@@ -66,14 +68,14 @@ public class Utils {
 
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error){
+                    public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
                 }
         );
-        if (rq==null) {
+        if (rq == null) {
             rq = Volley.newRequestQueue(context);
         }
         rq.add(request);

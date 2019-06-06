@@ -1,21 +1,100 @@
 package fr.etudes.ps6finalandroid.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+
 import fr.etudes.ps6finalandroid.R;
+import fr.etudes.ps6finalandroid.utils.Constants;
+import fr.etudes.ps6finalandroid.utils.MqttMessageService;
+import fr.etudes.ps6finalandroid.utils.PahoMqttClient;
+
+
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private MqttAndroidClient client;
+    private String TAG = "MainActivity";
+    private PahoMqttClient pahoMqttClient;
+    private Button publishMessage;
+    private MqttAndroidClient mqttAndroidClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button bouton = findViewById(R.id.bouton);
-        bouton.setVisibility(View.INVISIBLE);
+        pahoMqttClient = new PahoMqttClient();
+
+
+
+        publishMessage = (Button) findViewById(R.id.publishMessage);
+        client = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
+        //mqttAndroidClient = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
+
+        publishMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                    try {
+                        pahoMqttClient.publishMessage(client, "join", 2, Constants.PUBLISH_TOPIC);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                try {
+                    pahoMqttClient.subscribe(client, "number/topic", 2);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        });
+        client.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean b, String s) {
+
+            }
+
+            @Override
+            public void connectionLost(Throwable throwable) {
+
+            }
+
+            @Override
+            public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+                String str=new String(mqttMessage.getPayload());
+                if(s.equals("number/topic"))
+                    changerNombre(str);
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
+            }
+        });
+
+        Intent intent = new Intent(MainActivity.this, MqttMessageService.class);
+        startService(intent);
+
+
+
+
+
         /*
         Utils.get( 1,this, new ServerCallBack(){
             @Override
@@ -49,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void activerBouton(String texte){
+    /*private void activerBouton(String texte){
         Button bouton = findViewById(R.id.bouton);
         bouton.setText(texte);
         bouton.setVisibility(View.VISIBLE);
@@ -59,16 +138,29 @@ public class MainActivity extends AppCompatActivity {
                 //Back end
             }
         });
-    }
+    }*/
 
     private void changerTexte(String s){
         TextView texte = findViewById(R.id.texte);
         texte.setText(s);
     }
 
-    private void changerNombre(int n){
-        TextView nombre = findViewById(R.id.nombre);
-        nombre.setText(String.valueOf(n));
+    private void changerNombre(String str){
+
+            TextView nombre = findViewById(R.id.nombre);
+            nombre.setText(str);
+
+
     }
 
 }
+
+
+
+
+
+
+
+
+
+

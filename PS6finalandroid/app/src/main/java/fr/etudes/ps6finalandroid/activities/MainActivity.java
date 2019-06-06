@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
                                     changerTexte(listeString[i]);
                                     break;
                                 case 2:
-                                    changerNombre(listeString[i]);
+                                    String string = listeString[i].replaceAll("[^0-9]", "");
+                                    changerNombre(string);
                                     break;
                                 case 3:
                                     changerTexteBouton(listeString[i]);

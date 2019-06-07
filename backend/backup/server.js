@@ -55,15 +55,15 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
         liste.shift();
         var obj = [];
         for (var i = 0; i != liste.length; i++) {
-            if (liste[i] != num) {
+            if (i != 0) {
                 obj.push({
                     "numero": liste[i],
-                    "nombre": i + 1,
+                    "nombre": i,
                 })
             }
             else {
                 obj.push({
-                    "numero": num,
+                    "numero": liste[i],
                     "texte": "C'est à vous !",
                     "nombre": 0,
                     "texte_bouton": "Rejoindre la file"

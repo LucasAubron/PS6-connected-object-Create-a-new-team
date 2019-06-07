@@ -52,7 +52,6 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
 }).get('/suivant', function (req, res) {///suivant
     console.log("Suivant !");
     if (liste.length > 0) {
-        liste.shift();
         var obj = [];
         for (var i = 0; i != liste.length; i++) {
             if (i != 0) {
@@ -70,6 +69,7 @@ app.get('/ajouterNum', function (req, res) {///ajouterNum?numero=
                 })
             }
         }
+        liste.shift();
         res.json(obj);
 
     }

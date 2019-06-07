@@ -5,18 +5,21 @@ var liste = [];
 
 function jsonSauf(num) {
     var obj = [];
+    var place = 9999;
     for (var i = 0; i != liste.length; i++) {
-        if (liste[i].numero != num) {
+        if (liste[i] != num) {
             obj.push({
                 "numero": liste[i],
                 "nombre": i + 1,
+                "nombre": i < place ? i + 1 : i,
             })
         }
         else {
+            place = i;
             obj.push({
                 "numero": num,
                 "texte": "Taille de la file",
-                "nombre": liste.length - 1,
+                "nombre": liste.length-1,
                 "texte_bouton": "Rejoindre la file"
             })
         }

@@ -20,6 +20,8 @@ import fr.etudes.ps6finalandroid.utils.Constants;
 import fr.etudes.ps6finalandroid.utils.MqttMessageService;
 import fr.etudes.ps6finalandroid.utils.PahoMqttClient;
 
+import static fr.etudes.ps6finalandroid.utils.Constants.MQTT_BROKER_URL;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         publishMessage = (Button) findViewById(R.id.publishMessage);
-        client = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
+        client = pahoMqttClient.getMqttClient(getApplicationContext(), MQTT_BROKER_URL, Constants.CLIENT_ID);
         //mqttAndroidClient = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
 
 

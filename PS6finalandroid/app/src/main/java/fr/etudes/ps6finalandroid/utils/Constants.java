@@ -9,7 +9,7 @@ package fr.etudes.ps6finalandroid.utils;
 
 public class Constants {
 
-    public static final String MQTT_BROKER_URL = "tcp://192.168.0.13";
+    public static final String MQTT_BROKER_URL = "tcp://192.168.43.92:1883";
 
     public static final String PUBLISH_TOPIC = "join/topic";
 

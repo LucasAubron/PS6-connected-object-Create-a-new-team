@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pahoMqttClient = new PahoMqttClient();
-
-
+        //new Constants();
 
         publishMessage = (Button) findViewById(R.id.publishMessage);
         client = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);

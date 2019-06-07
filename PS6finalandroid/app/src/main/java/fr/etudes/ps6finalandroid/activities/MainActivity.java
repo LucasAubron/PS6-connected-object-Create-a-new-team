@@ -77,6 +77,34 @@ public class MainActivity extends AppCompatActivity {
                 String str=new String(mqttMessage.getPayload());
                 if(s.equals("number/topic"))
                     changerNombre(str);
+
+                int etat = 0;//0 rien, 1 texte, 2 nombre, 3 texte_bouton
+                String[] listeString = str.split("\"");
+                for (int i = 0; i != listeString.length; i++){
+                    if (listeString[i].length() > 0 && !listeString[i].equals("{") && !listeString[i].equals("}") && !listeString[i].equals(" ") && !listeString[i].equals(":")
+                     && !listeString[i].equals("[") && !listeString[i].equals("]") && !listeString[i].equals(",")){
+                        if (listeString[i].equals("nombre"))
+                            etat = 1;
+                        else if (listeString[i].equals("nombre"))
+                            etat = 2;
+                        else if (listeString[i].equals("texte_bouton"))
+                            etat = 3;
+                        else{
+                            switch (etat){
+                                case 1:
+                                    changerTexte(listeString[i]);
+                                    break;
+                                case 2:
+                                    String string = listeString[i].replaceAll("[^0-9]", "");
+                                    changerNombre(string);
+                                    break;
+                                case 3:
+                                    changerTexteBouton(listeString[i]);
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
@@ -148,6 +176,11 @@ public class MainActivity extends AppCompatActivity {
             nombre.setText(str);
 
 
+    }
+
+    private void changerTexteBouton(String str){
+        Button bouton = findViewById(R.id.publishMessage);
+        bouton.setText(str);
     }
 
 }

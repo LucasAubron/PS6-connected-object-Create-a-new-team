@@ -36,16 +36,18 @@ public class MainActivity extends AppCompatActivity {
         pahoMqttClient = new PahoMqttClient();
 
 
-
         publishMessage = (Button) findViewById(R.id.publishMessage);
         client = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
         //mqttAndroidClient = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
+
+
+
 
         publishMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
+                if(!publishMessage.getText().equals("Quitter la file")) {
                     try {
                         pahoMqttClient.publishMessage(client, "join", 2, Constants.PUBLISH_TOPIC);
                     } catch (MqttException e) {
@@ -53,10 +55,19 @@ public class MainActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                try {
-                    pahoMqttClient.subscribe(client, "number/topic", 2);
-                } catch (MqttException e) {
-                    e.printStackTrace();
+                    try {
+                        pahoMqttClient.subscribe(client, "number/topic", 2);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        pahoMqttClient.publishMessage(client, "suppr", 2, Constants.SUPPR_TOPIC);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -75,37 +86,35 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-                String str=new String(mqttMessage.getPayload());
-                if(s.equals("number/topic"))
-                    changerNombre(str);
+                String str = new String(mqttMessage.getPayload());
 
-                int etat = 0;//0 rien, 1 texte, 2 nombre, 3 texte_bouton
-                String[] listeString = str.split("\"");
-                for (int i = 0; i != listeString.length; i++){
-                    if (listeString[i].length() > 0 && !listeString[i].equals("{") && !listeString[i].equals("}") && !listeString[i].equals(" ") && !listeString[i].equals(":")
-                     && !listeString[i].equals("[") && !listeString[i].equals("]") && !listeString[i].equals(",")){
-                        if (listeString[i].equals("nombre"))
-                            etat = 1;
-                        else if (listeString[i].equals("nombre"))
-                            etat = 2;
-                        else if (listeString[i].equals("texte_bouton"))
-                            etat = 3;
-                        else{
-                            switch (etat){
-                                case 1:
-                                    changerTexte(listeString[i]);
-                                    break;
-                                case 2:
-                                    String string = listeString[i].replaceAll("[^0-9]", "");
-                                    changerNombre(string);
-                                    break;
-                                case 3:
-                                    changerTexteBouton(listeString[i]);
-                                    break;
+                    int etat = 0;//0 rien, 1 texte, 2 nombre, 3 texte_bouton
+                    String[] listeString = str.split("\"");
+                    for (int i = 0; i != listeString.length; i++) {
+                        if (listeString[i].length() > 0 && !listeString[i].equals("{") && !listeString[i].equals("}") && !listeString[i].equals(" ") && !listeString[i].equals(":")
+                                && !listeString[i].equals("[") && !listeString[i].equals("]") && !listeString[i].equals(",") && !listeString[i].equals("}]")) {
+                            if (listeString[i].equals("texte"))
+                                etat = 1;
+                            else if (listeString[i].equals("nombre"))
+                                etat = 2;
+                            else if (listeString[i].equals("texte_bouton"))
+                                etat = 3;
+                            else {
+                                switch (etat) {
+                                    case 1:
+                                        changerTexte(listeString[i]);
+                                        break;
+                                    case 2:
+                                        String string = listeString[i].replaceAll("[^0-9]", "");
+                                        changerNombre(string);
+                                        break;
+                                    case 3:
+                                        changerTexteBouton(listeString[i]);
+                                        break;
+                                }
                             }
                         }
                     }
-                }
             }
 
             @Override
@@ -118,68 +127,28 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
 
 
-
-
-
-        /*
-        Utils.get( 1,this, new ServerCallBack(){
-            @Override
-            public void onSuccess(JSONArray responseArray, JSONObject response) {
-                listeFileAttente[0] = new FileAttente("Médecin1", responseArray.length(), 1);
-            }});
-        Utils.get( 2,this, new ServerCallBack(){
-            @Override
-            public void onSuccess(JSONArray responseArray, JSONObject response) {
-                listeFileAttente[1] = new FileAttente("Médecin2", responseArray.length(), 2);
-            }});
-        Utils.get( 3,this, new ServerCallBack(){
-            @Override
-            public void onSuccess(JSONArray responseArray, JSONObject response) {
-                listeFileAttente[2] = new FileAttente("Médecin3", responseArray.length(), 3);
-            }});
-        Utils.get( 4,this, new ServerCallBack(){
-            @Override
-            public void onSuccess(JSONArray responseArray, JSONObject response) {
-                listeFileAttente[3] = new FileAttente("Médecin4", responseArray.length(), 4);
-            }});
-        try {
-            TimeUnit.MILLISECONDS.sleep(46);
-        } catch(Exception e) {
-        }
-        */
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
     }
 
-    /*private void activerBouton(String texte){
-        Button bouton = findViewById(R.id.bouton);
-        bouton.setText(texte);
-        bouton.setVisibility(View.VISIBLE);
-        bouton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Back end
-            }
-        });
-    }*/
 
-    private void changerTexte(String s){
+    private void changerTexte(String s) {
         TextView texte = findViewById(R.id.texte);
         texte.setText(s);
     }
 
-    private void changerNombre(String str){
+    private void changerNombre(String str) {
 
-            TextView nombre = findViewById(R.id.nombre);
-            nombre.setText(str);
+        TextView nombre = findViewById(R.id.nombre);
+        nombre.setText(str);
 
 
     }
 
-    private void changerTexteBouton(String str){
+    private void changerTexteBouton(String str) {
         Button bouton = findViewById(R.id.publishMessage);
         bouton.setText(str);
     }

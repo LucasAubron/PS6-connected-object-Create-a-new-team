@@ -13,5 +13,9 @@ public class Constants {
 
     public static final String PUBLISH_TOPIC = "join/topic";
 
+    public static final String SUPPR_TOPIC = "suppr/topic";
+
+    public static final String CREATION_TOPIC = "creation/topic";
+
     public static final String CLIENT_ID = "androidkt";
 }

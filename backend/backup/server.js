@@ -6,7 +6,7 @@ var liste = [];
 function jsonSauf(num) {
     var obj = [];
     for (var i = 0; i != liste.length; i++) {
-        if (liste[i] != num) {
+        if (liste[i].numero != num) {
             obj.push({
                 "numero": liste[i],
                 "nombre": i + 1,

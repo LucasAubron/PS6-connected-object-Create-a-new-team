@@ -42,14 +42,11 @@ public class MainActivity extends AppCompatActivity {
         client = pahoMqttClient.getMqttClient(getApplicationContext(), MQTT_BROKER_URL, Constants.CLIENT_ID);
         //mqttAndroidClient = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
 
-
-
-
         publishMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(!publishMessage.getText().equals("Quitter la file")) {
+                if(publishMessage.getText().equals("Rejoindre la file")) {
                     try {
                         pahoMqttClient.publishMessage(client, "join", 2, Constants.PUBLISH_TOPIC);
                     } catch (MqttException e) {
@@ -60,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         pahoMqttClient.subscribe(client, "number/topic", 2);
                     } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }else if(publishMessage.getText().equals("Démarrer")){
+                    try {
+                        pahoMqttClient.publishMessage(client, "creation", 2, Constants.CREATION_TOPIC);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                 }else{
